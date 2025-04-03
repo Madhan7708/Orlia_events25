@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Day 1 Events - Orlia'25</title>
+    <link rel="stylesheet" href="assets/styles/styles.css" />
+    <link rel="stylesheet" href="assets/styles/login.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/styles/assistant.css">
+    <style>
+      .day1-events {
+        padding: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .event-header,
+      .performance-details {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .venue,
+      .venue-right {
+        font-weight: bold;
+      }
+
+      .event-title {
+        font-size: 2.5rem;
+        color: #333;
+        text-align: center;
+        margin-bottom: 0.5rem;
+      }
+
+      .section-subtitle {
+        text-align: center;
+        color: #666;
+        margin-bottom: 2rem;
+      }
+
+      .events-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        padding: 1rem;
+      }
+
+      .event-card {
+        background: #fff;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: transform 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        height: 100%; /* Added to maintain consistent height */
+      }
+
+      .event-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .event-image {
+        position: relative;
+        height: 200px;
+        overflow: hidden;
+        flex-shrink: 0; /* Prevent image from shrinking */
+      }
+
+      .event-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .event-date {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: rgba(0, 0, 0, 0.7);
+        color: #fff;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 0.9rem;
+      }
+
+      .register-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: #4caf50;
+        color: #fff;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        z-index: 10;
+      }
+
+      .register-btn:hover {
+        background: #388e3c;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .rules-btn {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: #2196F3;
+        color: #fff;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        cursor: pointer;
+        border: none;
+        z-index: 10;
+        transition: all 0.3s ease;
+      }
+
+      .rules-btn:hover {
+        background: #1976D2;
+        transform: translateY(-2px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 1000;
+        backdrop-filter: blur(4px);
+      }
+
+      .modal-content {
+        background: #fff;
+        width: 90%;
+        max-width: 500px;
+        margin: 15% auto;
+        padding: 2rem;
+        border-radius: 10px;
+        position: relative;
+        animation: modalFade 0.3s ease;
+      }
+
+      @keyframes modalFade {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      .close-modal {
+        position: absolute;
+        right: 1.5rem;
+        top: 1rem;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #666;
+        transition: color 0.3s;
+      }
+
+      .close-modal:hover {
+        color: #f44336;
+      }
+
+      .modal-title {
+        color: #333;
+        margin-bottom: 1.5rem;
+        font-size: 1.5rem;
+        border-bottom: 2px solid #2196F3;
+        padding-bottom: 0.5rem;
+      }
+
+      .modal-rules {
+        list-style: none;
+        padding: 0;
+      }
+
+      .modal-rules li {
+        display: flex;
+        align-items: start;
+        gap: 0.8rem;
+        margin-bottom: 1rem;
+        color: #555;
+        line-height: 1.4;
+      }
+
+      .modal-rules i {
+        color: #2196F3;
+        margin-top: 0.2rem;
+      }
+
+      .event-header {
+        padding: 0.75rem 1rem;
+        background: #f8f8f8;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        align-items: center;
+        min-height: 50px;
+      }
+
+      .event-header-row {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        width: 100%;
+      }
+
+      .event-time,
+      .event-venue {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #666;
+        font-size: 0.9rem;
+        white-space: nowrap;
+      }
+
+      .event-time i,
+      .event-venue i {
+        color: #4caf50;
+        font-size: 1.1rem;
+      }
+
+      .event-content {
+        flex: 1;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        text-align: left; /* Changed from center to left */
+      }
+
+      .event-content h3 {
+        text-align: center; /* Keep title centered */
+        color: #333;
+        margin-bottom: 0.8rem;
+        font-size: 1.3rem;
+      }
+
+      .event-content p {
+        text-align: center; /* Keep performance type centered */
+        color: #666;
+        margin-bottom: 1.2rem;
+        font-size: 0.95rem;
+      }
+
+      .rules-list {
+        text-align: left; /* Keep rules list left-aligned */
+        list-style: none;
+        padding: 0;
+      }
+
+      .rules-list li {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #555;
+        margin-bottom: 0.5rem;
+      }
+
+      .rules-list i {
+        color: #4caf50;
+      }
+
+      .event-footer,
+      .event-location,
+      .event-btn {
+        display: none;
+      }
+
+      .back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.8rem;
+        color: #333;
+        text-decoration: none;
+        padding: 0.8rem 1.2rem;
+        font-weight: 500;
+        background: #f5f5f5;
+        border-radius: 8px;
+        margin: 1rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      }
+
+      .back-btn i {
+        font-size: 1.2rem;
+        transition: transform 0.3s ease;
+      }
+
+      .back-btn:hover {
+        color: #4caf50;
+        background: #e8f5e9;
+        transform: translateX(-5px);
+      }
+
+      .back-btn:hover i {
+        transform: translateX(-3px);
+      }
+
+      @media (max-width: 768px) {
+        .day1-events {
+          padding: 1rem;
+        }
+
+        .event-title {
+          font-size: 2rem;
+        }
+
+        .events-container {
+          grid-template-columns: 1fr;
+          gap: 1.5rem;
+        }
+
+        .event-card {
+          width: 100%;
+          margin: 0 auto;
+        }
+
+        .event-image {
+          height: 180px;
+        }
+
+        .event-header {
+          padding: 0.5rem 1rem;
+        }
+
+        .event-header-row {
+          gap: 1rem;
+        }
+
+        .event-time,
+        .event-venue {
+          font-size: 0.85rem;
+        }
+
+        .event-content {
+          padding: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a href="index.html" class="back-btn">
+      <i class="ri-arrow-left-line"></i>
+      Back to Home
+    </a>
+
+    <section class="day1-events">
+      <h2 class="event-title">Day 1 Events</h2>
+      <p class="section-subtitle">
+        April 3, 2025 - Cultural Events
+      </p>
+
+      <div class="events-container">
+        <!-- tamil speech -->
+        <div class="event-card">
+          <div class="event-image">
+            <img src="assets/images/tamilspeech.jpg" alt="" />
+            <button class="rules-btn" onclick="toggleModal('tamilModal')">Topics</button>
+            <a
+              href="register.php?day=day1&event=Tamilspeech"
+              class="register-btn"
+              >Register Now</a
+            >
+          </div>
+          <div class="event-header">
+            <div class="event-header-row">
+              <div class="event-time">
+                <i class="ri-time-line"></i>
+                <span>9.30 AM - 11.00 AM</span>
+              </div>
+              <div class="event-venue">
+                <i class="ri-map-pin-line"></i>
+                <span>CH-1</span>
+              </div>
+            </div>
+          </div>
+          <div class="event-content">
+            <h3 class="event-name">Tamil Speech</h3>
+            <p>Solo Performance</p>
+            <ul class="rules-list">
+              <li>
+                <i class="ri-checkbox-circle-line"></i>போட்டி இரண்டு சுற்றுகள்.
+              </li>
+              <li>
+                <i class="ri-checkbox-circle-line"></i>முதல் சுற்று: 3 நிமிடம்
+                பேச்சு, சிறந்தவர்கள் தேர்வு.
+              </li>
+              <li>
+                <i class="ri-checkbox-circle-line"></i>இரண்டாம் சுற்று: 5
+                நிமிடம் தயார், 3 நிமிடம் பேச்சு, வெற்றி.
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- english speech -->
+        <div class="event-card">
+          <div class="event-image">
+            <img src="assets/images/engspeech.jpg" alt="" />
+            <button class="rules-btn" onclick="toggleModal('englishModal')">Topics</button>
+            <a
+              href="register.php?day=day1&event=Englishspeech"
+              class="register-btn"
+              >Register Now</a
+            >
+          </div>
+          <div class="event-header">
+            <div class="event-header-row">
+              <div class="event-time">
+                <i class="ri-time-line"></i>
+                <span>9.30 AM - 11.00 AM</span>
+              </div>
+              <div class="event-venue">
+                <i class="ri-map-pin-line"></i>
+                <span>CH-2</span>
+              </div>
+            </div>
+          </div>
+          <div class="event-content">
+            <h3>English Speech</h3>
+            <p>Solo Performance</p>
+            <ul class="rules-list">
+              <li>
+                <i class="ri-checkbox-circle-line"></i>Duration: 3-4 minutes.
+              </li>
+              <li>
+                <i class="ri-checkbox-circle-line"></i> Round 1: Speech on an
+                given topic.
+              </li>
+              <li>
+                <i class="ri-checkbox-circle-line"></i>Round 2: On-the-spot
+                topic.
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- Drama Performance -->
+        <div class="event-card">
+          <div class="event-image">
+            <img src="assets/images/sing.jpg" alt="Drama Performance" />
+            <a href="register.php?day=day1&event=Singing" class="register-btn"
+              >Register Now</a
+            >
+          </div>
+          <div class="event-header">
+            <div class="event-header-row">
+              <div class="event-time">
+                <i class="ri-time-line"></i>
+                <span>9.30 AM - 11.00 AM</span>
+              </div>
+              <div class="event-venue">
+                <i class="ri-map-pin-line"></i>
+                <span>CH-3</span>
+              </div>
+            </div>
+          </div>
+          <div class="event-content">
+            <h3>Singing</h3>
+            <p>Solo Performance</p>
+            <ul class="rules-list">
+              <li>
+                <i class="ri-checkbox-circle-line"></i>Sing with or without
+                instruments.
+              </li>
+              <li>
+                <i class="ri-checkbox-circle-line"></i>Karaoke allowed; submit
+                in advance if needed.
+              </li>
+              <li>
+                <i class="ri-checkbox-circle-line"></i> Judging: Vocal quality,
+                stage presence, expression, song difficulty, and audience
+                engagement.
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-image">
+            <img src="assets/images/solo.jpg" alt="Traditional Arts" />
+            <a href="register.php?day=day1&event=Solodance" class="register-btn"
+              >Register Now</a
+            >
+          </div>
+          <div class="event-header">
+            <div class="event-header-row">
+              <div class="event-time">
+                <i class="ri-time-line"></i>
+                <span>10.00 AM - 12.00 PM</span>
+              </div>
+              <div class="event-venue">
+                <i class="ri-map-pin-line"></i>
+                <span>CH-5</span>
+              </div>
+            </div>
+          </div>
+          <div class="event-content">
+            <h3>Solo Dance</h3>
+            <p>Solo Performance</p>
+            <ul class="rules-list">
+              <li>
+                <i class="ri-checkbox-circle-line"></i>Solo competition
+                (individual participants only).
+              </li>
+
+              <li>
+                <i class="ri-checkbox-circle-line"></i>Random songs played based
+                on slot selection; dance accordingly.
+              </li>
+              <li>
+                <i class="ri-checkbox-circle-line"></i>Judging: Spontaneity,
+                expression, and adaptability.
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-image">
+            <img src="assets/images/draw.jpg" alt="Fashion Show" />
+            <button class="rules-btn" onclick="toggleModal('drawingModal')">Topics</button>
+            <a href="#" class="register-btn" onclick="disableLink(event)"
+              >Register Now</a
+            >
+          </div>
+          <div class="event-header">
+            <div class="event-header-row">
+              <div class="event-time">
+                <i class="ri-time-line"></i>
+                <span>10.30 AM - 11.30 AM</span>
+              </div>
+              <div class="event-venue">
+                <i class="ri-map-pin-line"></i>
+                <span>Drawing Hall</span>
+              </div>
+            </div>
+          </div>
+          <div class="event-content">
+            <h3>Drawing</h3>
+            <p>Solo Performance</p>
+            <ul class="rules-list">
+              <li>
+                <i class="ri-checkbox-circle-line"></i>Theme-based drawing,
+                Duration: 60 minutes.
+              </li>
+              <li>
+                <i class="ri-checkbox-circle-line"></i>Use A3 or A4 sheets.
+              </li>
+              <li>
+                <i class="ri-checkbox-circle-line"></i>Any medium allowed
+                (pencils, paints, markers, charcoal).
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-image">
+            <img src="assets/images/trailertime.jpg" alt="Quiz Competition" />
+            <a
+              href="groupregister.php?day=day1&event=Trailertime"
+              class="register-btn"
+              >Register Now</a
+            >
+          </div>
+          <div class="event-header">
+            <div class="event-header-row">
+              <div class="event-time">
+                <i class="ri-time-line"></i>
+                <span>10.30 AM - 12.00 PM</span>
+              </div>
+              <div class="event-venue">
+                <i class="ri-map-pin-line"></i>
+                <span>CH-4</span>
+              </div>
+            </div>
+          </div>
+          <div class="event-content">
+            <h3>Trailer Time</h3>
+            <p>Group Performance</p>
+            <ul class="rules-list">
+              <li>
+                <i class="ri-checkbox-circle-line"></i>Trailer duration: 1 to 3
+                minutes (audio & video provided on the spot).
+              </li>
+              <li>
+                <i class="ri-checkbox-circle-line"></i>Maximum 1-2 Members.
+              </li>
+              <li>
+                <i class="ri-checkbox-circle-line"></i>Original creation only
+                plagiarism not allowed.
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-image">
+            <img src="assets/images/firelesscook.jpg" alt="Photography Contest" />
+            <a href="#" onclick="disableLink(event)" class="register-btn">Register Now</a>
+
+
+
+          </div>
+          <div class="event-header">
+            <div class="event-header-row">
+              <div class="event-time">
+                <i class="ri-time-line"></i>
+                <span>11.00 AM - 12.30 PM</span>
+              </div>
+              <div class="event-venue">
+                <i class="ri-map-pin-line"></i>
+                <span>Vishweshwaraya Hall</span>
+              </div>
+            </div>
+          </div>
+          <div class="event-content">
+            <h3>Fireless Cooking</h3>
+            <p>Group Performance</p>
+            <ul class="rules-list">
+              <li>
+                <i class="ri-checkbox-circle-line"></i>The participants must
+                bring the required materials.
+              </li>
+              <li>
+                <i class="ri-checkbox-circle-line"></i>Maximum 2 Members.</li>
+              <li>
+                <i class="ri-checkbox-circle-line"></i> Appliances that require
+                heat, like toasters or grills, are not allowed.
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-image">
+            <img src="assets/images/dumb.jpeg" alt="Stand-up Comedy" />
+            <a
+              href="#" onclick="disableLink(event)"
+              class="register-btn"
+              >Register Now</a
+            >
+          </div>
+          <div class="event-header">
+            <div class="event-header-row">
+              <div class="event-time">
+                <i class="ri-time-line"></i>
+                <span>11.00 AM - 1.00 PM</span>
+              </div>
+              <div class="event-venue">
+                <i class="ri-map-pin-line"></i>
+                <span>Vivekanandha</span>
+              </div>
+            </div>
+          </div>
+          <div class="event-content">
+            <h3>Dump Charades</h3>
+            <p>Group Performance</p>
+            <ul class="rules-list">
+              <li>
+                <i class="ri-checkbox-circle-line"></i>This event consists of 3
+                rounds.
+              </li>
+              <li>
+                <i class="ri-checkbox-circle-line"></i>Maximum 2-3 Members.
+              </li>
+              <li>
+                <i class="ri-checkbox-circle-line"></i>It is fun event. Based on
+                concentration and team coordination.
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-image">
+            <img src="assets/images/ipl.jpg" alt="Short Film Festival" />
+            <a
+              href="#" onclick="disableLink(event)"
+              class="register-btn"
+              >Register Now</a
+            >
+          </div>
+          <div class="event-header">
+            <div class="event-header-row">
+              <div class="event-time">
+                <i class="ri-time-line"></i>
+                <span>2.00 PM - 4.00 PM</span>
+              </div>
+              <div class="event-venue">
+                <i class="ri-map-pin-line"></i>
+                <span>CH-5</span>
+              </div>
+            </div>
+          </div>
+          <div class="event-content">
+            <h3>IPL Auction</h3>
+            <p>Group Performance</p>
+            <ul class="rules-list">
+              <li>
+                <i class="ri-checkbox-circle-line"></i>Virtual money provided as
+                team budget for bidding and buying players.
+              </li>
+              <li><i class="ri-checkbox-circle-line"></i>Maximum 3 Members.</li>
+              <li>
+                <i class="ri-checkbox-circle-line"></i>Team structure: Batsmen,
+                4 Bowlers, 1 All-rounder, 1 Legend (any category), 1
+                Wicketkeeper.
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-image">
+            <img src="assets/images/mehandi.jpg" alt="Poetry Recitation" />
+            <a href="#" class="register-btn" onclick="disableLink(event)"
+              >Register Now</a
+            >
+          </div>
+          <div class="event-header">
+            <div class="event-header-row">
+              <div class="event-time">
+                <i class="ri-time-line"></i>
+                <span>1.30 PM - 3.00 PM</span>
+              </div>
+              <div class="event-venue">
+                <i class="ri-map-pin-line"></i>
+                <span>Vivekanandha Hall</span>
+              </div>
+            </div>
+          </div>
+          <div class="event-content">
+            <h3>Mehandi</h3>
+            <p>Solo Performance</p>
+            <ul class="rules-list">
+              <li><i class="ri-checkbox-circle-line"></i>Individual event.</li>
+              <li>
+                <i class="ri-checkbox-circle-line"></i>Participants are
+                encouraged to bring their own requirements.
+              </li>
+              <li>
+                <i class="ri-checkbox-circle-line"></i>Time duration: 60
+                Minutes.
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-image">
+            <img src="assets/images/lyrical.jpg" alt="Music Band Performance" />
+            <a
+              href="#" onclick="disableLink(event)"
+              class="register-btn"
+              >Register Now</a
+            >
+          </div>
+          <div class="event-header">
+            <div class="event-header-row">
+              <div class="event-time">
+                <i class="ri-time-line"></i>
+                <span>1.30 PM - 3.30 PM</span>
+              </div>
+              <div class="event-venue">
+                <i class="ri-map-pin-line"></i>
+                <span>CH-4</span>
+              </div>
+            </div>
+          </div>
+          <div class="event-content">
+            <h3>Lyrical Hunt</h3>
+            <p>Group Performance</p>
+            <ul class="rules-list">
+              <li>
+                <i class="ri-checkbox-circle-line"></i>Identify the song,
+                complete the lyrics, or respond with matching lyrics.
+              </li>
+              <li>
+                <i class="ri-checkbox-circle-line"></i>Maximum 2-3 Members.
+              </li>
+              <li>
+                <i class="ri-checkbox-circle-line"></i>Time-limited rounds for
+                each challenge.
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-image">
+            <img src="assets/images/divideconquer.jpg" alt="Art Exhibition" />
+            <a
+              href="groupregister.php?day=day1&event=Divideconquer"
+              class="register-btn"
+              >Register Now</a
+            >
+          </div>
+          <div class="event-header">
+            <div class="event-header-row">
+              <div class="event-time">
+                <i class="ri-time-line"></i>
+                <span>2.00 PM - 3.30 PM</span>
+              </div>
+              <div class="event-venue">
+                <i class="ri-map-pin-line"></i>
+                <span>CH-2</span>
+              </div>
+            </div>
+          </div>
+          <div class="event-content">
+            <h3>Divide and Conquer</h3>
+            <p>Group Performance</p>
+            <ul class="rules-list">
+              <li>
+                <i class="ri-checkbox-circle-line"></i>Rounds with group-based
+                activities.
+              </li>
+              <li>
+                <i class="ri-checkbox-circle-line"></i>Maximum 4-5 Members.
+              </li>
+              <li>
+                <i class="ri-checkbox-circle-line"></i>Strategic task division
+                required to complete challenges.
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-image">
+            <img src="assets/images/meme.jpg" alt="Debate Competition" />
+            <a href="register.php?day=day1&event=Memecreation" class="register-btn"
+              >Register Now</a
+            >
+          </div>
+          <div class="event-header">
+            <div class="event-header-row">
+              <div class="event-time">
+                <i class="ri-time-line"></i>
+                <span>2.00 PM - 3.30 PM</span>
+              </div>
+              <div class="event-venue">
+                <i class="ri-map-pin-line"></i>
+                <span>CH-3</span>
+              </div>
+            </div>
+          </div>
+          <div class="event-content">
+            <h3>Meme/Reels Creation</h3>
+            <p>Solo Performance</p>
+            <ul class="rules-list">
+              <li>
+                <i class="ri-checkbox-circle-line"></i>Submit memes, reels, or
+                both based on given themes.
+              </li>
+              <li>
+                <i class="ri-checkbox-circle-line"></i>Content must be
+                appropriate (no hate speech, violence, or offensive material).
+              </li>
+              <li>
+                <i class="ri-checkbox-circle-line"></i>Reel duration: 20-45
+                seconds.
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-image">
+            <img src="assets/images/group.jpg" alt="Traditional Arts" />
+            <a
+              href="groupregister.php?day=day1&event=Groupdance"
+              class="register-btn"
+              >Register Now</a
+            >
+          </div>
+          <div class="event-header">
+            <div class="event-header-row">
+              <div class="event-time">
+                <i class="ri-time-line"></i>
+                <span>4.00 PM</span>
+              </div>
+              <div class="event-venue">
+                <i class="ri-map-pin-line"></i>
+                <span>Ground</span>
+              </div>
+            </div>
+          </div>
+          <div class="event-content">
+            <h3>Group Dance</h3>
+            <p>Group Performance</p>
+            <ul class="rules-list">
+              <li>
+                <i class="ri-checkbox-circle-line"></i> Duration: 5 minutes
+                (Tracks must be verified with Fine Arts Coordinator by
+                29.03.2025).
+              </li>
+              <li>
+                <i class="ri-checkbox-circle-line"></i>Maximum 6-15 Members.
+              </li>
+              <li>
+                <i class="ri-checkbox-circle-line"></i> Any dance form allowed
+                (Classical, Folk, Western, Fusion, etc.).
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer class="single-line-footer">
+      <p>&copy; 2025 TECHNOLOGY INNOVATION HUB. All Rights Reserved.</p>
+    </footer>
+
+    <!-- Add modals before closing body tag -->
+    <!-- Tamil Speech Modal -->
+    <div id="tamilModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="toggleModal('tamilModal')">&times;</span>
+            <h3 class="modal-title">Tamil Speech Topics</h3>
+            <ul class="modal-rules">
+                <li><i class="ri-checkbox-circle-line"></i>இந்தியா : பல மாநிலங்களின் கூட்டமைப்பு</li>
+                <li><i class="ri-checkbox-circle-line"></i>மொழிப்போர் : அன்றும்,   இன்றும்.</li>
+                <li><i class="ri-checkbox-circle-line"></i>அரசியல் பிழைத்தோர்க்கு ஆறம் கூற்றாகும்</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- English Speech Modal -->
+    <div id="englishModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="toggleModal('englishModal')">&times;</span>
+            <h3 class="modal-title">English Speech Topics</h3>
+            <ul class="modal-rules">
+                <li><i class="ri-checkbox-circle-line"></i>Poverty and income inequality: Can we ever bridge the gap?</li>
+                <li><i class="ri-checkbox-circle-line"></i>Social media: Connecting people or creating distance?</li>
+                <li><i class="ri-checkbox-circle-line"></i>Education: A right or a privilege?</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Drawing Modal -->
+    <div id="drawingModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="toggleModal('drawingModal')">&times;</span>
+            <h3 class="modal-title">Drawing Topics</h3>
+            <ul class="modal-rules">
+                <li><i class="ri-checkbox-circle-line"></i>The Beauty of the Four Seasons.</li>
+                <li><i class="ri-checkbox-circle-line"></i>Dreamland with a pet.</li>
+                <li><i class="ri-checkbox-circle-line"></i>Social issue & awareness.</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+      function disableLink(event) {
+        event.preventDefault(); // Stops the default action
+        alert("Registration Closed for this event.Try for Another Events");
+      }
+    </script>
+    <script>
+        function toggleModal(modalId) {
+            const modal = document.getElementById(modalId);
+            const allModals = document.querySelectorAll('.modal');
+            
+            // Close all other modals first
+            allModals.forEach(m => {
+                if (m.id !== modalId) {
+                    m.style.display = 'none';
+                }
+            });
+
+            // Toggle the selected modal
+            modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                document.querySelectorAll('.modal').forEach(modal => {
+                    modal.style.display = 'none';
+                });
+            }
+        });
+    </script>
+  </body>
+</html>
